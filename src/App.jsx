@@ -1,7 +1,6 @@
 import { useState } from "react";
-
 import { Provider } from "react-redux";
-import store from "./store/store";
+import store from "./app/store";
 
 import PuppyDetails from "./features/puppies/PuppyDetails";
 import PuppyList from "./features/puppies/PuppyList";
@@ -16,19 +15,17 @@ import "./App.scss";
  * see more details about a specific player, and remove a player from the roster.
  */
 export default function App() {
-  const [selectedPuppyId, setSelectedPuppyId] = useState();
 
   return (
     <Provider store={store}>
-      <h1>Puppy Bowl</h1>
-      <PuppyForm />
-      <main>
-        <PuppyList setSelectedPuppyId={setSelectedPuppyId} />
-        <PuppyDetails
-          selectedPuppyId={selectedPuppyId}
-          setSelectedPuppyId={setSelectedPuppyId}
-        />
-      </main>
+      <div className="app-container">
+        <h1>Puppy Bowl</h1>
+        <PuppyForm />
+        <main>
+          <PuppyList />
+          <PuppyDetails />
+        </main>
+      </div>
     </Provider>
   );
 }

@@ -1,26 +1,33 @@
-import api from "../../store/api";
+import { useGetPuppiesQuery } from "../../api/api";
+import { useDispatch } from "react-redux";
+import { setSelectedPuppyId } from "./puppySlice";
 
-/*
-TODO: Define the following 4 endpoints:
-  1. getPuppies (query)
-  2. getPuppy (query)
-  3. addPuppy (mutation)
-  4. deletePuppy (mutation)
+/**
+ * @component
+ * Shows a list of puppies in the roster.
+ * Users can select a puppy to see more information about it.
+ */
+export default function PuppyList() {
+  const dispatch = useDispatch();
+  const { data: puppies, isLoading } = useGetPuppiesQuery();
 
-The query endpoints should provide the "Puppy" tag.
-The mutation endpoints should invalidate the "Puppy" tag.
-
-(Optional) TODO: Write `transformResponse` and `transformErrorResponse`
-functions for each endpoint.
-*/
-
-const puppyApi = api.injectEndpoints({
-  endpoints: (build) => ({}),
-});
-
-export const {
-  useGetPuppiesQuery,
-  useGetPuppyQuery,
-  useAddPuppyMutation,
-  useDeletePuppyMutation,
-} = puppyApi;
+  return (
+    <article>
+      <h2>Roster</h2>
+      <ul className="puppies">
+        {isLoading && <li>Loading puppies...</li>}
+        {puppies?.map((p) => (
+          <li key={p.id} className="puppy-card">
+            <h3>{p.name} #{p.id}</h3>
+            <figure>
+              <img src={p.imageUrl} alt={p.name} />
+            </figure>
+            <button onClick={() => dispatch(setSelectedPuppyId(p.id))}>
+              See details
+            </button>
+          </li>
+        ))}
+      </ul>
+    </article>
+  );
+}
